@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.publisher.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -27,6 +28,14 @@ class HomeFragment : Fragment() {
 
         viewModel.fetchArticles()
 
+        // Initialize SwipeRefreshLayout
+        val swipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
+
+        // Set up a refresh listener
+        swipeRefreshLayout.setOnRefreshListener {
+            viewModel.fetchArticles()
+        }
+
         recyclerViewAdapter = HomeAdapter()
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = recyclerViewAdapter
@@ -34,6 +43,9 @@ class HomeFragment : Fragment() {
         // Set up the RecyclerView with your data list
         viewModel.articleItems.observe(viewLifecycleOwner) { articleItems ->
             recyclerViewAdapter.submitList(articleItems)
+
+            // Stop the refreshing animation when data is loaded
+            swipeRefreshLayout.isRefreshing = false
         }
 
 
