@@ -1,17 +1,25 @@
 package com.example.publisher
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.publisher.databinding.ItemHomeBinding
 
-class HomeAdapter(private val dataList: List<ArticleItem>) :
-    RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
+class HomeAdapter() :
+    ListAdapter<ArticleItem, RecyclerView.ViewHolder>(DiffCallback) {
 
     class ViewHolder(private val binding: ItemHomeBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(dataItem: ArticleItem) {
-            binding.article = dataItem
+            binding.articleTitle.text = dataItem.title
+            binding.articleContent.text = dataItem.content
+            binding.authorName.text = dataItem.author
+            binding.categoty.text = dataItem.category
+            binding.createdTime.text = dataItem.createdTime
+
             binding.executePendingBindings()
         }
     }
@@ -22,13 +30,19 @@ class HomeAdapter(private val dataList: List<ArticleItem>) :
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = dataList[position]
-        holder.bind(item)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val item = getItem(position)
+        (holder as ViewHolder).bind(item)
     }
 
-    override fun getItemCount(): Int {
-        return dataList.size
+    companion object DiffCallback : DiffUtil.ItemCallback<ArticleItem>() {
+        override fun areItemsTheSame(oldItem: ArticleItem, newItem: ArticleItem): Boolean {
+            return oldItem === newItem
+        }
+
+        override fun areContentsTheSame(oldItem: ArticleItem, newItem: ArticleItem): Boolean {
+            return oldItem == newItem
+        }
     }
 }
 

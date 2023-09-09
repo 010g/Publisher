@@ -2,9 +2,7 @@
 
 <layout>
     <data>
-        <variable
-            name="article"
-            type="com.example.publisher.ArticleItem" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
