@@ -2,6 +2,8 @@ package com.example.publisher
 
 import android.content.ContentValues
 import android.util.Log
+import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModel
 import androidx.databinding.Bindable
 import androidx.databinding.Observable
@@ -37,14 +39,15 @@ class PublishViewModel : ViewModel(), Observable {
         get() = _articleItems
 
     // Function to handle article publishing
-    fun publishArticle() {
+    fun publishArticle(authorEmail: String, authorName: String, authorId: String) {
         val articleTitle = _title.value ?: ""
         val articleCategory = _category.value ?: ""
         val articleContent = _content.value ?: ""
+
         model.addData(
-            "test@gmail.com",
-            "test123",
-            "王小明",
+            authorEmail,
+            authorId,
+            authorName,
             articleTitle,
             articleContent,
             articleCategory
@@ -54,7 +57,9 @@ class PublishViewModel : ViewModel(), Observable {
         _title.value = ""
         _category.value = ""
         _content.value = ""
+
     }
+
 
     fun fetchArticles() {
         viewModelScope.launch {

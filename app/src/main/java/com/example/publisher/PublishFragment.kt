@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.publisher.databinding.FragmentPublishBinding
@@ -28,9 +30,21 @@ class PublishFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner // Set the lifecycle owner to observe LiveData
 
         binding.publishButton.setOnClickListener{
-            viewModel.publishArticle()
+            val authorEmail = "test@gmail.com"
+            val authorName = "Wayne Chen"
+            val authorId = "test123"
+            if (authorEmail.isNotEmpty() && authorId.isNotEmpty() && authorName.isNotEmpty()) {
+                viewModel.publishArticle(authorEmail, authorName, authorId)
+            } else {
+                // Author information is missing, show an error message
+                showToast("Author information is required to publish an article.")
+            }
         }
 
         return view
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 }

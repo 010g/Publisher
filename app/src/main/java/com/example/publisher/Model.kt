@@ -3,6 +3,7 @@ package com.example.publisher
 import android.content.ContentValues.TAG
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -42,7 +43,8 @@ class Model {
     }
 
     suspend fun getData(): QuerySnapshot {
-        return db.collection("articles").get().await()
+        return db.collection("articles")
+            .orderBy("createdTime", Query.Direction.DESCENDING).get().await()
     }
 
 }
